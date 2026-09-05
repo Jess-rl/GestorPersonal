@@ -41,7 +41,7 @@ public class Contacto {
 
     @Override
     public String toString() {
-        return "Contacto [Nombre: %s+, Telefono: %s, Correo: %s]".formatted(nombre, telefono, correo);
+        return "Contacto [Nombre: %s, Telefono: %s, Correo: %s]".formatted(nombre, telefono, correo);
     }
 
 }

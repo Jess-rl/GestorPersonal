@@ -61,9 +61,9 @@ public class GestorAgenda {
     }
 
     // Modificar
-    public void modificarNota(int indice, Nota cActualizar) {
+    public void modificarNota(int indice, Nota nActualizar) {
         if (indice >= 0 && indice < notas.size()) {
-            notas.set(indice, cActualizar);
+            notas.set(indice, nActualizar);
         }
     }
 
