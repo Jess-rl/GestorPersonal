@@ -10,8 +10,9 @@ Aplicación de escritorio desarrollada en **Java Swing** como **proyecto académ
 
 - **Gestión de contactos:** alta, modificación y eliminación con validación de nombre, teléfono (10 dígitos) y correo electrónico.
 - **Gestión de notas:** CRUD completo con fecha automática y límites de longitud (título 3–60 caracteres, contenido máx. 1000).
-- **Gestión de recordatorios:** agendamiento con validación de fecha (`AAAA-MM-DD`) y hora (formato 24 h `HH:MM`), con marcado de tareas completadas.
-- **Panel de inicio:** resumen en cascada de las 3 notas más recientes y tabla de recordatorios con casillas de verificación.
+- **Gestión de recordatorios:** agendamiento con validación real de fecha (`LocalDate.parse`, rechaza fechas inexistentes como `2026-13-45`) y hora (formato 24 h `HH:MM`), con marcado de tareas completadas.
+- **Panel de inicio:** resumen en cascada de las 3 notas más recientes (ordenadas por fecha) y tabla de recordatorios con casillas de verificación.
+- **Fuente única de verdad:** todos los datos (contactos, notas y recordatorios) viven en `GestorAgenda`; las vistas nunca mantienen copias propias.
 - **Sincronización en tiempo real:** las notas creadas, editadas o eliminadas se reflejan al instante en el panel de inicio.
 - **Confirmaciones y avisos:** diálogos modales para cada operación y confirmación previa antes de eliminar.
 
@@ -49,9 +50,10 @@ Proyecto estructurado bajo el patrón **MVC** con dependencias unidireccionales:
 └────────────────────────────┘
 ```
 
-- **Controlador centralizado:** `GestorAgenda` reúne las colecciones y expone las operaciones CRUD de cada entidad.
+- **Controlador centralizado:** `GestorAgenda` reúne las colecciones y expone las operaciones CRUD de cada entidad. Es la única fuente de verdad de la aplicación.
 - **Vista desacoplada:** los paneles Swing capturan la interacción y delegan en el gestor; la navegación usa `CardLayout`.
 - **Modelo encapsulado:** entidades con atributos privados, constructores y métodos `get`/`set`.
+- **Colecciones protegidas:** los métodos `get` de `GestorAgenda` devuelven **copias** (`new ArrayList<>(...)`), de modo que las vistas no pueden alterar el estado interno directamente.
 - **Almacenamiento en memoria** durante la ejecución (sin base de datos), ya que el foco era la lógica y la interfaz.
 
 ---
@@ -73,9 +75,11 @@ AgendaContactosJava/
 │       ├── Contacto.java
 │       ├── Nota.java
 │       └── Recordatorio.java
-├── bin/                           # Clases compiladas (.class)
+├── bin/                           # Salida de compilación (generada, ignorada por git)
 └── lib/                           # Dependencias externas (vacío)
 ```
+
+> `bin/` y los archivos `.class` están excluidos del control de versiones mediante `.gitignore`.
 
 ---
 
