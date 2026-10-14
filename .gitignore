@@ -1,0 +1,10 @@
+# Archivos compilados de Java
+bin/
+*.class
+
+# Configuración de editores/IDE
+.idea/
+*.iml
+.settings/
+.classpath
+.project
