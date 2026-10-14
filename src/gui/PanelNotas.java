@@ -33,10 +33,6 @@ public class PanelNotas extends JPanel {
     private JButton btnModificar;
     private JButton btnEliminar;
 
-    public PanelNotas(GestorAgenda gestor) {
-        this(gestor, null);
-    }
-
     public PanelNotas(GestorAgenda gestor, PanelInicio panelInicio) {
         this.gestor = gestor;
         this.panelInicio = panelInicio;
@@ -133,34 +129,40 @@ public class PanelNotas extends JPanel {
         cargarNotas();
     }
 
-    public void setPanelInicio(PanelInicio panelInicio) {
-        this.panelInicio = panelInicio;
-    }
-
-    private void guardarNota() {
+    private boolean validarFormulario() {
         String titulo = txtTitulo.getText().trim();
         String contenido = txtContenido.getText().trim();
 
         if (titulo.isEmpty() || contenido.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Completa todos los campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
+            return false;
         }
 
         if (titulo.length() < 3) {
             JOptionPane.showMessageDialog(this, "El título debe tener al menos 3 caracteres.", "Error en Título", JOptionPane.WARNING_MESSAGE);
-            return;
+            return false;
         }
 
         if (titulo.length() > 60) {
             JOptionPane.showMessageDialog(this, "El título es demasiado largo (máximo 60 caracteres).", "Error en Título", JOptionPane.WARNING_MESSAGE);
-            return;
+            return false;
         }
 
         if (contenido.length() > 1000) {
             JOptionPane.showMessageDialog(this, "El contenido excede el límite permitido (máximo 1000 caracteres).", "Error en Contenido", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void guardarNota() {
+        if (!validarFormulario()) {
             return;
         }
 
+        String titulo = txtTitulo.getText().trim();
+        String contenido = txtContenido.getText().trim();
         String fechaActual = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
         Nota nuevaNota = new Nota(titulo, contenido, fechaActual);
 
@@ -183,29 +185,12 @@ public class PanelNotas extends JPanel {
         }
         int fila = tablaNotas.convertRowIndexToModel(filaVista);
 
+        if (!validarFormulario()) {
+            return;
+        }
+
         String titulo = txtTitulo.getText().trim();
         String contenido = txtContenido.getText().trim();
-
-        if (titulo.isEmpty() || contenido.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Completa todos los campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (titulo.length() < 3) {
-            JOptionPane.showMessageDialog(this, "El título debe tener al menos 3 caracteres.", "Error en Título", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (titulo.length() > 60) {
-            JOptionPane.showMessageDialog(this, "El título es demasiado largo (máximo 60 caracteres).", "Error en Título", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (contenido.length() > 1000) {
-            JOptionPane.showMessageDialog(this, "El contenido excede el límite permitido (máximo 1000 caracteres).", "Error en Contenido", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         String fechaActual = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
         Nota notaModificada = new Nota(titulo, contenido, fechaActual);
 

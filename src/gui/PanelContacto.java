@@ -148,30 +148,42 @@ public class PanelContacto extends JPanel {
         cargarContactos();
     }
 
-    private void guardarContacto() {
+    private boolean validarFormulario() {
         String nombre = txtNombre.getText().trim();
         String tel = txtTelefono.getText().trim();
         String correo = txtCorreo.getText().trim();
 
         if (nombre.isEmpty() || tel.isEmpty() || correo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
+            return false;
         }
 
         if (!nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
             JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras y espacios.", "Error en Nombre", JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
 
         if (!tel.matches("^\\d{10}$")) {
             JOptionPane.showMessageDialog(this, "El teléfono debe contener exactamente 10 dígitos numéricos.", "Error en Teléfono", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!correo.matches("^[\\w.-]+@([\\w-]+\\.)+[\\w-]{2,}$")) {
+            JOptionPane.showMessageDialog(this, "Ingresa un formato de correo válido (ej. usuario@mail.com).", "Error en Correo", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void guardarContacto() {
+        if (!validarFormulario()) {
             return;
         }
 
-        if (!correo.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            JOptionPane.showMessageDialog(this, "Ingresa un formato de correo válido (ej. usuario@mail.com).", "Error en Correo", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        String nombre = txtNombre.getText().trim();
+        String tel = txtTelefono.getText().trim();
+        String correo = txtCorreo.getText().trim();
 
         Contacto nuevoContacto = new Contacto(nombre, tel, correo);
         gestor.agregarContacto(nuevoContacto);
@@ -189,29 +201,13 @@ public class PanelContacto extends JPanel {
         }
         int fila = tablaContactos.convertRowIndexToModel(filaVista);
 
+        if (!validarFormulario()) {
+            return;
+        }
+
         String nombre = txtNombre.getText().trim();
         String tel = txtTelefono.getText().trim();
         String correo = txtCorreo.getText().trim();
-
-        if (nombre.isEmpty() || tel.isEmpty() || correo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (!nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
-            JOptionPane.showMessageDialog(this, "El nombre solo debe contener letras y espacios.", "Error en Nombre", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (!tel.matches("^\\d{10}$")) {
-            JOptionPane.showMessageDialog(this, "El teléfono debe contener exactamente 10 dígitos numéricos.", "Error en Teléfono", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (!correo.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            JOptionPane.showMessageDialog(this, "Ingresa un formato de correo válido (ej. usuario@mail.com).", "Error en Correo", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         Contacto contactoModificado = new Contacto(nombre, tel, correo);
         gestor.modificarContacto(fila, contactoModificado);

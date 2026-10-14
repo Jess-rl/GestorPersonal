@@ -5,6 +5,7 @@ import modelo.Nota;
 import modelo.Recordatorio;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class GestorAgenda {
 
@@ -21,94 +22,77 @@ public class GestorAgenda {
     // Metodos para contactos
     // CRUD---------------------------------------------------------
 
-    // Agregar
     public void agregarContacto(Contacto nuevoContacto) {
         contactos.add(nuevoContacto);
     }
 
-    // Eliminar
     public void eliminarContacto(int indice) {
         if (indice >= 0 && indice < contactos.size()) {
             contactos.remove(indice);
         }
     }
 
-    // Modificar
     public void modificarContacto(int indice, Contacto cActualizar) {
         if (indice >= 0 && indice < contactos.size()) {
             contactos.set(indice, cActualizar);
         }
     }
 
-    // Obtener
     public ArrayList<Contacto> getContactos() {
-        return contactos;
+        return new ArrayList<>(contactos);
     }
 
     // Metodos para Notas
     // CRUD-------------------------------------------------------------
 
-    //  Agregar
     public void agregarNota(Nota n) {
         notas.add(n);
     }
 
-    // Eliminar
     public void eliminarNota(int indice) {
         if (indice >= 0 && indice < notas.size()) {
             notas.remove(indice);
         }
     }
 
-    // Modificar
     public void modificarNota(int indice, Nota nActualizar) {
         if (indice >= 0 && indice < notas.size()) {
             notas.set(indice, nActualizar);
         }
     }
 
-    // Obtener
     public ArrayList<Nota> getNotas() {
-        return notas;
+        return new ArrayList<>(notas);
     }
 
-    // Visualizar notas
     public ArrayList<Nota> getNotasRecientes() {
-        ArrayList<Nota> recientes = new ArrayList<>();
+        ArrayList<Nota> ordenadas = new ArrayList<>(notas);
+        ordenadas.sort(Comparator.comparing(Nota::getFecha).reversed());
 
-        for (int i = notas.size() - 1; i >= 0 && recientes.size() < 3; i--) {
-            recientes.add(notas.get(i));
-        }
-
-        return recientes;
+        int limite = Math.min(3, ordenadas.size());
+        return new ArrayList<>(ordenadas.subList(0, limite));
     }
 
     // Metodos para Recordatorio
     // CRUD-------------------------------------------------------------
 
-    //Agregar
-    public void agregarRecordatorio(Recordatorio r){
+    public void agregarRecordatorio(Recordatorio r) {
         recordatorios.add(r);
     }
 
-    //Eliminar
-    public void eliminarRecordatorio(int indice){
-        if (indice >= 0 && indice < recordatorios.size()){
+    public void eliminarRecordatorio(int indice) {
+        if (indice >= 0 && indice < recordatorios.size()) {
             recordatorios.remove(indice);
         }
     }
 
-    // Obtener
-    public ArrayList<Recordatorio> getRecordatorios(){
-        return recordatorios;
+    public ArrayList<Recordatorio> getRecordatorios() {
+        return new ArrayList<>(recordatorios);
     }
 
-    //cambio estado
-    public void cambiarEstadoRecordatorio(int indice){
-        if(indice >= 0 && indice < recordatorios.size()){
-            Recordatorio r = recordatorios.get(indice);
-            r.setCompletado(!r.getCompletado());
+    public void marcarRecordatorio(int indice, boolean completado) {
+        if (indice >= 0 && indice < recordatorios.size()) {
+            recordatorios.get(indice).setCompletado(completado);
         }
     }
-
 }

@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -24,14 +25,12 @@ import modelo.Recordatorio;
 public class PanelInicio extends JPanel {
 
     private GestorAgenda gestor;
-    private List<Recordatorio> listaRecordatorios;
     private List<Nota> ultimasNotas;
     private DefaultTableModel modeloTablaRec;
     private JPanel contenedorNotas;
 
     public PanelInicio(GestorAgenda gestor) {
         this.gestor = gestor;
-        this.listaRecordatorios = new ArrayList<>();
         this.ultimasNotas = new ArrayList<>();
 
         setLayout(new BorderLayout(15, 15));
@@ -63,9 +62,9 @@ public class PanelInicio extends JPanel {
         modeloTablaRec.addTableModelListener(e -> {
             int row = e.getFirstRow();
             int col = e.getColumn();
-            if (col == 0 && row >= 0 && row < listaRecordatorios.size()) {
+            if (col == 0 && row >= 0 && row < gestor.getRecordatorios().size()) {
                 boolean estado = (Boolean) modeloTablaRec.getValueAt(row, 0);
-                listaRecordatorios.get(row).setCompletado(estado);
+                gestor.marcarRecordatorio(row, estado);
             }
         });
 
@@ -92,8 +91,7 @@ public class PanelInicio extends JPanel {
 
         add(panelCuerpo, BorderLayout.CENTER);
 
-        // Carga inicial
-        cargarRecordatorio(new Recordatorio("Entregar proyecto", "2026-09-04", "23:59", false));
+        refrescarRecordatorios();
         refrescarTarjetasNotas();
     }
 
@@ -119,8 +117,10 @@ public class PanelInicio extends JPanel {
                 return;
             }
 
-            if (!fecha.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-                JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Usa AAAA-MM-DD (ej. 2026-09-04).", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            try {
+                LocalDate.parse(fecha, DateTimeFormatter.ISO_LOCAL_DATE);
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(this, "Fecha inválida. Usa una fecha real en formato AAAA-MM-DD (ej. 2026-09-04).", "Error de Formato", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -129,14 +129,16 @@ public class PanelInicio extends JPanel {
                 return;
             }
 
-            Recordatorio nuevo = new Recordatorio(asunto, fecha, hora, false);
-            cargarRecordatorio(nuevo);
+            gestor.agregarRecordatorio(new Recordatorio(asunto, fecha, hora, false));
+            refrescarRecordatorios();
         }
     }
 
-    private void cargarRecordatorio(Recordatorio rec) {
-        listaRecordatorios.add(rec);
-        modeloTablaRec.addRow(new Object[]{rec.getCompletado(), rec.getAsunto(), rec.getFecha(), rec.getHora()});
+    private void refrescarRecordatorios() {
+        modeloTablaRec.setRowCount(0);
+        for (Recordatorio r : gestor.getRecordatorios()) {
+            modeloTablaRec.addRow(new Object[]{r.getCompletado(), r.getAsunto(), r.getFecha(), r.getHora()});
+        }
     }
 
     public void refrescarTarjetasNotas() {
