@@ -134,6 +134,6 @@ Proyecto **grupal** desarrollado por **2 integrantes** en el 2.º semestre de In
 
 ---
 
-## 📄 Notas
+## 📄 Licencia
 
-Este proyecto es de uso académico y demostrativo. Los datos no se guardan entre ejecuciones (almacenamiento en memoria). Para más información, contacta al autor.
+Este proyecto es de uso académico. Para más información, contacta al autor.
