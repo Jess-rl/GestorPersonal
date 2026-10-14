@@ -1,6 +1,6 @@
 # 📇 Gestor Personal — Agenda de Contactos, Notas y Recordatorios
 
-> 🎓 Aplicación de escritorio desarrollada en **Java Swing** como proyecto grupal de la asignatura **Programación Orientada a Objetos** (2.º semestre de Ingeniería de Software).
+> Aplicación de escritorio desarrollada en **Java Swing** como proyecto grupal de la asignatura **Programación Orientada a Objetos** (2.º semestre de Ingeniería de Software).
 
 Proyecto **académico** cuyo objetivo fue aplicar, de forma práctica, los fundamentos de la programación orientada a objetos y el desarrollo de interfaces gráficas de escritorio: encapsulamiento, separación de responsabilidades, manejo de eventos y estructuración del código bajo el patrón arquitectónico **MVC** (Modelo – Vista – Controlador).
 
@@ -10,9 +10,9 @@ Proyecto **académico** cuyo objetivo fue aplicar, de forma práctica, los funda
 
 **Gestor Personal** permite administrar de forma sencilla tres tipos de información desde una única ventana con navegación por pestañas:
 
-- 👥 **Contactos:** nombre, teléfono y correo electrónico.
-- 🗒️ **Notas:** título y contenido, con marca de fecha automática.
-- ⏰ **Recordatorios:** asunto, fecha y hora, con estado de completado.
+- **Contactos:** nombre, teléfono y correo electrónico.
+- **Notas:** título y contenido, con marca de fecha automática.
+- **Recordatorios:** asunto, fecha y hora, con estado de completado.
 
 Toda la información se almacena **en memoria** durante la ejecución (no se persiste en disco ni base de datos), ya que el foco del proyecto era la lógica de negocio y la interfaz gráfica, no la persistencia.
 
@@ -46,13 +46,13 @@ Toda la información se almacena **en memoria** durante la ejecución (no se per
 
 | Área | Detalle |
 |------|---------|
-| 💻 Lenguaje | Java (JDK 17 o superior) |
-| 🖼️ Interfaz gráfica | Java Swing / AWT |
-| 🏗️ Arquitectura | Patrón MVC |
-| 📦 Estructuras de datos | `ArrayList` |
-| 📅 Fechas | API `java.time` (`LocalDate`, `DateTimeFormatter`) |
-| ✅ Validación | Expresiones regulares y `DocumentFilter` |
-| 🧰 IDE | Visual Studio Code (Java Extension Pack) |
+| Lenguaje | Java (JDK 17 o superior) |
+| Interfaz gráfica | Java Swing / AWT |
+| Arquitectura | Patrón MVC |
+| Estructuras de datos | `ArrayList` |
+| Fechas | API `java.time` (`LocalDate`, `DateTimeFormatter`) |
+| Validación | Expresiones regulares y `DocumentFilter` |
+| IDE | Visual Studio Code (Java Extension Pack) |
 
 **Aprendizajes clave:** programación orientada a objetos, composición de componentes Swing (`JFrame`, `JPanel`, `CardLayout`, `JTable`, `JOptionPane`), manejo de eventos (`ActionListener`, `ListSelectionListener`, `TableModelListener`), validación de datos y trabajo colaborativo en equipo.
 
@@ -83,9 +83,9 @@ AgendaContactosJava/
 
 ## 🏛️ Arquitectura (MVC)
 
-- 🧱 **Modelo (`modelo/`):** clases `Contacto`, `Nota` y `Recordatorio`. Representan las entidades con sus atributos encapsulados, constructores y métodos `get`/`set`.
-- ⚙️ **Lógica / Controlador (`logica/GestorAgenda.java`):** centraliza el estado de la aplicación y expone las operaciones CRUD sobre cada colección.
-- 🖥️ **Vista (`gui/`):** componentes Swing que capturan la interacción del usuario y delegan la lógica al `GestorAgenda`. La navegación entre paneles se realiza con `CardLayout`.
+- **Modelo (`modelo/`):** clases `Contacto`, `Nota` y `Recordatorio`. Representan las entidades con sus atributos encapsulados, constructores y métodos `get`/`set`.
+- **Lógica / Controlador (`logica/GestorAgenda.java`):** centraliza el estado de la aplicación y expone las operaciones CRUD sobre cada colección.
+- **Vista (`gui/`):** componentes Swing que capturan la interacción del usuario y delegan la lógica al `GestorAgenda`. La navegación entre paneles se realiza con `CardLayout`.
 
 ---
 
