@@ -1,66 +1,64 @@
 # 📇 Gestor Personal — Agenda de Contactos, Notas y Recordatorios
 
-> Aplicación de escritorio desarrollada en **Java Swing** como proyecto grupal de la asignatura **Programación Orientada a Objetos** (2.º semestre de Ingeniería de Software).
+Aplicación de escritorio desarrollada en **Java Swing** como **proyecto académico** (2.º semestre). Permite administrar contactos, notas y recordatorios desde una única ventana con navegación por pestañas, aplicando el patrón arquitectónico **MVC** (Modelo – Vista – Controlador).
 
-Proyecto **académico** cuyo objetivo fue aplicar, de forma práctica, los fundamentos de la programación orientada a objetos y el desarrollo de interfaces gráficas de escritorio: encapsulamiento, separación de responsabilidades, manejo de eventos y estructuración del código bajo el patrón arquitectónico **MVC** (Modelo – Vista – Controlador).
-
----
-
-## 📝 Descripción
-
-**Gestor Personal** permite administrar de forma sencilla tres tipos de información desde una única ventana con navegación por pestañas:
-
-- **Contactos:** nombre, teléfono y correo electrónico.
-- **Notas:** título y contenido, con marca de fecha automática.
-- **Recordatorios:** asunto, fecha y hora, con estado de completado.
-
-Toda la información se almacena **en memoria** durante la ejecución (no se persiste en disco ni base de datos), ya que el foco del proyecto era la lógica de negocio y la interfaz gráfica, no la persistencia.
+> **Nota:** proyecto de escritorio con fines educativos; no está destinado a producción.
 
 ---
 
 ## ✨ Características
 
-### 🏠 Panel Principal (Inicio)
-- Tabla interactiva de recordatorios con casillas de verificación para marcar tareas completadas.
-- Resumen en cascada de las **3 notas más recientes**.
-- Diálogo modal para agregar recordatorios con **validación de fecha** (`AAAA-MM-DD`) y **hora** (formato 24 h `HH:MM`).
-
-### 👥 Módulo de Contactos
-- Registro, edición y eliminación de contactos (CRUD completo).
-- Listado tabular no editable con selección de fila.
-- **Validaciones de entrada:**
-  - Nombre: solo letras y espacios.
-  - Teléfono: exactamente 10 dígitos numéricos (filtrado en tiempo real).
-  - Correo: estructura de email válida mediante expresión regular.
-- Confirmación previa antes de eliminar.
-
-### 🗒️ Módulo de Notas
-- CRUD completo con edición en el mismo formulario.
-- **Validaciones:** campos obligatorios, título entre 3 y 60 caracteres, contenido máximo de 1000 caracteres.
-- Registro automático de la fecha de creación/modificación.
-- **Sincronización en tiempo real** con el resumen del panel de inicio.
+- **Gestión de contactos:** alta, modificación y eliminación con validación de nombre, teléfono (10 dígitos) y correo electrónico.
+- **Gestión de notas:** CRUD completo con fecha automática y límites de longitud (título 3–60 caracteres, contenido máx. 1000).
+- **Gestión de recordatorios:** agendamiento con validación de fecha (`AAAA-MM-DD`) y hora (formato 24 h `HH:MM`), con marcado de tareas completadas.
+- **Panel de inicio:** resumen en cascada de las 3 notas más recientes y tabla de recordatorios con casillas de verificación.
+- **Sincronización en tiempo real:** las notas creadas, editadas o eliminadas se reflejan al instante en el panel de inicio.
+- **Confirmaciones y avisos:** diálogos modales para cada operación y confirmación previa antes de eliminar.
 
 ---
 
-## 🛠️ Tecnologías y conceptos aplicados
+## 🛠️ Tecnologías
 
-| Área | Detalle |
-|------|---------|
+| Categoría | Tecnología |
+| --- | --- |
 | Lenguaje | Java (JDK 17 o superior) |
-| Interfaz gráfica | Java Swing / AWT |
+| UI | Java Swing / AWT |
 | Arquitectura | Patrón MVC |
 | Estructuras de datos | `ArrayList` |
 | Fechas | API `java.time` (`LocalDate`, `DateTimeFormatter`) |
 | Validación | Expresiones regulares y `DocumentFilter` |
 | IDE | Visual Studio Code (Java Extension Pack) |
 
-**Aprendizajes clave:** programación orientada a objetos, composición de componentes Swing (`JFrame`, `JPanel`, `CardLayout`, `JTable`, `JOptionPane`), manejo de eventos (`ActionListener`, `ListSelectionListener`, `TableModelListener`), validación de datos y trabajo colaborativo en equipo.
+---
+
+## 🏗️ Arquitectura
+
+Proyecto estructurado bajo el patrón **MVC** con dependencias unidireccionales:
+
+```
+┌────────────────────────────┐
+│  gui/  (Vistas Swing)      │  ← Formularios e interacción del usuario
+└──────────┬─────────────────┘
+           ▼
+┌────────────────────────────┐
+│  logica/GestorAgenda       │  ← Lógica de negocio y estado en memoria
+└──────────┬─────────────────┘
+           ▼
+┌────────────────────────────┐
+│  modelo/  (Entidades)      │  ← Modelos / POCOs del dominio
+└────────────────────────────┘
+```
+
+- **Controlador centralizado:** `GestorAgenda` reúne las colecciones y expone las operaciones CRUD de cada entidad.
+- **Vista desacoplada:** los paneles Swing capturan la interacción y delegan en el gestor; la navegación usa `CardLayout`.
+- **Modelo encapsulado:** entidades con atributos privados, constructores y métodos `get`/`set`.
+- **Almacenamiento en memoria** durante la ejecución (sin base de datos), ya que el foco era la lógica y la interfaz.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 📦 Estructura del proyecto
 
-```text
+```
 AgendaContactosJava/
 ├── src/
 │   ├── App.java                   # Punto de entrada (inicia la UI en el EDT con invokeLater)
@@ -81,21 +79,61 @@ AgendaContactosJava/
 
 ---
 
-## 🏛️ Arquitectura (MVC)
+## 💾 Modelo de datos
 
-- **Modelo (`modelo/`):** clases `Contacto`, `Nota` y `Recordatorio`. Representan las entidades con sus atributos encapsulados, constructores y métodos `get`/`set`.
-- **Lógica / Controlador (`logica/GestorAgenda.java`):** centraliza el estado de la aplicación y expone las operaciones CRUD sobre cada colección.
-- **Vista (`gui/`):** componentes Swing que capturan la interacción del usuario y delegan la lógica al `GestorAgenda`. La navegación entre paneles se realiza con `CardLayout`.
+| Entidad | Descripción | Campos principales |
+| --- | --- | --- |
+| `Contacto` | Datos de una persona | nombre, teléfono, correo |
+| `Nota` | Apunte rápido con fecha | título, contenido, fecha |
+| `Recordatorio` | Tarea con fecha y hora | asunto, fecha, hora, completado |
 
----
-
-## 👨‍💻 Equipo
-
-Proyecto **grupal** desarrollado por **2 integrantes** para la asignatura de Programación Orientada a Objetos, 2.º semestre.
+> Las entidades se almacenan en `ArrayList` dentro de `GestorAgenda`; no hay persistencia en disco.
 
 ---
 
-## 📌 Notas
+## 📱 Módulos de la aplicación
 
-- Proyecto de carácter **académico y demostrativo**; no está diseñado para producción.
-- Los datos no se guardan entre ejecuciones (almacenamiento en memoria).
+### PanelInicio
+Pantalla principal con dos secciones:
+- **Recordatorios:** tabla interactiva con casilla de verificación para marcar tareas completadas.
+- **Últimas notas:** tarjetas en cascada con las 3 notas más recientes.
+
+### PanelContacto
+Módulo de contactos:
+- Formulario de alta con validación de nombre, teléfono y correo.
+- Tabla de listado con selección de fila para modificar o eliminar.
+
+### PanelNotas
+Módulo de notas:
+- Formulario con título y contenido multilínea, con validación de longitud.
+- CRUD completo y sincronización automática con el panel de inicio.
+
+---
+
+## 📋 Próximos pasos (mejoras previstas)
+
+- [ ] Persistencia en archivos o base de datos (hoy todo vive en memoria).
+- [ ] Edición de recordatorios (actualmente solo alta y cambio de estado).
+- [ ] Búsqueda y ordenamiento en las tablas de contactos y notas.
+- [ ] Exportación e impresión de contactos y notas.
+- [ ] Tema oscuro y ajustes de accesibilidad visual.
+- [ ] Pruebas unitarias para la capa de lógica (`GestorAgenda`).
+
+---
+
+## 🎓 Contexto académico
+
+Proyecto **grupal** desarrollado por **2 integrantes** en el 2.º semestre de Ingeniería de Software, como parte de la asignatura **Programación Orientada a Objetos**, aplicando:
+
+- Programación orientada a objetos y encapsulamiento
+- Arquitectura MVC (Modelo – Vista – Controlador)
+- Interfaz gráfica con Java Swing
+- Manejo de eventos (`ActionListener`, `ListSelectionListener`, `TableModelListener`)
+- Validación de datos con expresiones regulares
+- Trabajo colaborativo en equipo
+
+---
+
+## 📄 Notas
+
+Este proyecto es de uso académico y demostrativo. Los datos no se guardan entre ejecuciones (almacenamiento en memoria). Para más información, contacta al autor.
